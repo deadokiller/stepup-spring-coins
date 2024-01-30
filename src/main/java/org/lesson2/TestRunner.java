@@ -13,6 +13,7 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.List;
 
 public class TestRunner {
     public static void runTests(Class clazz) {
@@ -26,57 +27,50 @@ public class TestRunner {
         if (methods.length == 0) {
             System.out.println(clazz.getSimpleName() + " : Нет размеченных нужными аннотациями методов в классе: "
                     + clazz.getName());
+            return;
         }
-        ArrayList<PriorityMethod> test = new ArrayList<>();
-        ArrayList<Method> beforeTest = new ArrayList<>();
-        ArrayList<Method> afterTest = new ArrayList<>();
+        List<PriorityMethod> test = new ArrayList<>();
+        List<Method> beforeTest = new ArrayList<>();
+        List<Method> afterTest = new ArrayList<>();
         Method beforeSuite = null;
         Method afterSuite = null;
         for (var m : methods) {
             if (m.isAnnotationPresent(Test.class)) {
                 if (Modifier.isStatic(m.getModifiers())) {
-                    System.out.println(clazz.getSimpleName() + " : Аннотация @Test не может быть установлена на " +
+                    throw new RuntimeException(clazz.getSimpleName() + " : Аннотация @Test не может быть установлена на " +
                             "статический метод");
-                    return;
                 } else {
                     var priority = m.getAnnotation(Test.class).priority();
                     if (priority > 0 && priority < 11) {
                         test.add(new PriorityMethod(m, priority));
                     } else {
-                        System.out.println(clazz.getSimpleName() + " : Значение параметра priority аннотации @Test лежит " +
+                        throw new RuntimeException(clazz.getSimpleName() + " : Значение параметра priority аннотации @Test лежит " +
                                 "за пределами диапазонов от 1 до 10");
-                        return;
                     }
                 }
             }
             if (m.isAnnotationPresent(BeforeSuite.class)) {
                 if (Modifier.isStatic(m.getModifiers())) {
                     if (beforeSuite != null) {
-                        System.out.println(clazz.getSimpleName() + " : Количество методов с аннотацией @BeforeSuite" +
+                        throw new RuntimeException(clazz.getSimpleName() + " : Количество методов с аннотацией @BeforeSuite" +
                                 " превышает допустимое значения");
-                        return;
                     }
                     beforeSuite = m;
                 } else {
-                    System.out.println(clazz.getSimpleName() + " : Аннотация @BeforeSuite установлена на не " +
+                    throw new RuntimeException(clazz.getSimpleName() + " : Аннотация @BeforeSuite установлена на не " +
                             "статический метод");
-                    return;
-
                 }
             }
             if (m.isAnnotationPresent(AfterSuite.class)) {
                 if (Modifier.isStatic(m.getModifiers())) {
                     if (afterSuite != null) {
-                        System.out.println(clazz.getSimpleName() + " : Количество методов с аннотацией @AfterSuite " +
+                        throw new RuntimeException(clazz.getSimpleName() + " : Количество методов с аннотацией @AfterSuite " +
                                 "превышает допустимое значения");
-                        return;
                     }
                     afterSuite = m;
                 } else {
-                    System.out.println(clazz.getSimpleName() + " : Аннотация @AfterSuite установлена на не " +
+                   throw new RuntimeException(clazz.getSimpleName() + " : Аннотация @AfterSuite установлена на не " +
                             "статический метод");
-                    return;
-
                 }
             }
             if (m.isAnnotationPresent(BeforeTest.class)) {
@@ -86,17 +80,16 @@ public class TestRunner {
                 afterTest.add(m);
             }
             if (m.isAnnotationPresent(CsvSource.class) && !(m.isAnnotationPresent(Test.class))) {
-                System.out.println(clazz.getSimpleName() + " : Аннотация @CsvSource может быть применена, " +
+                throw new RuntimeException(clazz.getSimpleName() + " : Аннотация @CsvSource может быть применена, " +
                         "только вместе с аннотацией @Test");
-                return;
             }
         }
         execMethods(clazz, beforeSuite, afterSuite, test, beforeTest, afterTest);
     }
 
     private static void execMethods(Class clazz, Method beforeSuite, Method afterSuite,
-                                    ArrayList<PriorityMethod> test, ArrayList<Method> beforeTest,
-                                    ArrayList<Method> afterTest) {
+                                    List<PriorityMethod> test, List<Method> beforeTest,
+                                    List<Method> afterTest) {
         try {
             var constructor = clazz.getConstructor();
             test.sort(Comparator.comparing(PriorityMethod::getPriority).reversed());
@@ -137,7 +130,11 @@ public class TestRunner {
             var args = source.replace(" ", "").split(",");
             var parameters = method.getParameters();
             Object[] arguments = new Object[args.length];
-            System.arraycopy(args, 0, arguments, 0, args.length);
+
+            if (args.length != parameters.length) {
+                throw new RuntimeException(object.getClass() + " : Неверное количество аргументов в аннотации @CsvSource");
+            }
+
             for (int i = 0; i < args.length; i++) {
                 Object value = null;
                 if (isNumeric(args[i])) {
@@ -149,10 +146,7 @@ public class TestRunner {
                 }
                 arguments[i] = value;
             }
-            if (arguments.length != parameters.length) {
-                System.out.println(object.getClass() + " : Неверное количество аргументов в аннотации @CsvSource");
-                return;
-            }
+
             method.invoke(object, arguments);
         } else {
             method.invoke(object);

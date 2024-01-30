@@ -16,17 +16,41 @@ public class Main {
     public static void main(String[] args) {
         TestRunner.runTests(Lesson2Example1.class); // Нет размеченных методов
         System.out.println("\n");
-        TestRunner.runTests(Lesson2Example2.class); // @AfterSuite на не статическом методе
+        try {
+            TestRunner.runTests(Lesson2Example2.class); // @AfterSuite на не статическом методе
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
         System.out.println("\n");
-        TestRunner.runTests(Lesson2Example3.class); // @BeforeSuite на не статическом методе
+        try {
+            TestRunner.runTests(Lesson2Example3.class); // @BeforeSuite на не статическом методе
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
         System.out.println("\n");
-        TestRunner.runTests(Lesson2Example4.class); // priority в тесте за пределами диапазона
+        try {
+            TestRunner.runTests(Lesson2Example4.class); // priority в тесте за пределами диапазона
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
         System.out.println("\n");
-        TestRunner.runTests(Lesson2Example5.class); // количество методов с @BeforeSuite больше 1
+        try {
+            TestRunner.runTests(Lesson2Example5.class); // количество методов с @BeforeSuite больше 1
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
         System.out.println("\n");
-        TestRunner.runTests(Lesson2Example6.class); // количество методов с @AfterSuite больше 1
+        try {
+            TestRunner.runTests(Lesson2Example6.class); // количество методов с @AfterSuite больше 1
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
         System.out.println("\n");
-        TestRunner.runTests(Lesson2Example7.class); // @Test на статическом методе
+        try {
+            TestRunner.runTests(Lesson2Example7.class); // @Test на статическом методе
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
         System.out.println("\n");
         TestRunner.runTests(Lesson2Example8.class); // Валидный пример с полным выводом
         System.out.println("\n");
@@ -35,6 +59,6 @@ public class Main {
         TestRunner.runTests(Lesson2Example10.class); // Валидный пример, но без @BeforeSuite
         System.out.println("\n");
         TestRunner.runTests(Lesson2Example11.class); // * Валидный пример с добавлением @BeforeTest @AfterTest
-                                                     // * @CsvSource добавлена, но без отдельных проверок.
+        // * @CsvSource добавлена, но без отдельных проверок.
     }
 }
