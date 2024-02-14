@@ -7,12 +7,14 @@ public class MyThreadPool {
     private final LinkedList<Runnable> queue = new LinkedList<>();
     private final Object sync = new Object();
     private boolean isAlive = true;
+    private int curThreadCount = 0;
     private int capacity;
 
     public MyThreadPool(int capacity) {
         this.capacity = capacity;
         for (int i = 0; i < capacity; i++) {
             new MyThread().start();
+            curThreadCount++;
         }
     }
 
@@ -35,6 +37,7 @@ public class MyThreadPool {
                     e.printStackTrace();
                 }
             }
+            curThreadCount--;
         }
     }
 
@@ -51,13 +54,20 @@ public class MyThreadPool {
     }
 
     public void execute(Runnable r) {
+        if (curThreadCount == 0) {
+            throw new IllegalArgumentException("Пул потоков остановлен, активных потоков в пуле не осталось");
+        }
         if (!isAlive) {
-            throw new RuntimeException("Пул потоков в процессе остановки, новые задания не принимаются, выполняются, только те что в очереде");
+            throw new IllegalArgumentException("Пул потоков в процессе остановки, новые задания не принимаются, выполняются, только те что в очереде");
         } else {
             synchronized (sync) {
                 queue.add(r);
                 sync.notifyAll();
             }
         }
+    }
+
+    public boolean awaitTermination() {
+        return !isAlive && queue.isEmpty() && curThreadCount == 0;
     }
 }
