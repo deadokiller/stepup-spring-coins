@@ -1,12 +1,11 @@
 package ru.vtb.javapro.homework.service.impl;
 
 import org.springframework.stereotype.Service;
+import ru.vtb.javapro.homework.entity.User;
 import ru.vtb.javapro.homework.repository.UserDao;
 import ru.vtb.javapro.homework.service.UserService;
-import ru.vtb.javapro.homework.model.User;
 
 import java.util.List;
-import java.util.Objects;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -18,15 +17,15 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void createUser(User user) {
-        userDao.create(user);
+        userDao.save(user);
     }
 
     @Override
     public void delete(Long id) {
-        userDao.delete(id);
+        userDao.deleteById(id);
     }
 
-    @Override
+/*    @Override
     public User getUser(Long id) {
         return userDao.read()
                 .stream()
@@ -34,15 +33,16 @@ public class UserServiceImpl implements UserService {
                 .findFirst()
                 .orElse(null);
     }
-
+*/
     @Override
     public List<User> getAllUsers() {
-        return userDao.read();
+        return userDao.findAll();
     }
 
     @Override
     public void update(Long id, String name) {
-        userDao.update(id, name);
+
+        userDao.save(new User(id,name));
     }
 
     @Override

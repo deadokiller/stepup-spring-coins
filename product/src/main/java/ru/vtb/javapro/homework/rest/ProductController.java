@@ -14,11 +14,12 @@ public class ProductController {
         this.userProductService = userProductService;
     }
 
-    private UserProductService userProductService;
+    private final UserProductService userProductService;
 
     @GetMapping("/user")
     public ProductResponse getProductByUser(@RequestParam Integer userId) {
-        return userProductService.getUserById(userId);
+        var t = userProductService.getUserById(userId);
+        return t;
     }
 
     @GetMapping("/product")
