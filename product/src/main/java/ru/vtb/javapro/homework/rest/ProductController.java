@@ -1,6 +1,7 @@
 package ru.vtb.javapro.homework.rest;
 
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -14,15 +15,16 @@ public class ProductController {
         this.userProductService = userProductService;
     }
 
-    private UserProductService userProductService;
+    private final UserProductService userProductService;
 
     @GetMapping("/user")
-    public ProductResponse getProductByUser(@RequestParam Integer userId) {
+    public ProductResponse getProductByUser(@RequestHeader("USERID") Integer userId) {
         return userProductService.getUserById(userId);
     }
 
     @GetMapping("/product")
-    public ProductResponse getProductByProduct(@RequestParam Integer productId) {
-        return userProductService.getProductsById(productId);
+    public ProductResponse getProductByProduct(@RequestParam Integer productId,
+                                               @RequestHeader("USERID") Integer userId) {
+        return userProductService.getProductsById(userId,productId);
     }
 }

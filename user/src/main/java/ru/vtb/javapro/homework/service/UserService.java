@@ -1,6 +1,7 @@
 package ru.vtb.javapro.homework.service;
 
-import ru.vtb.javapro.homework.model.User;
+
+import ru.vtb.javapro.homework.entity.User;
 
 import java.util.List;
 
@@ -11,7 +12,7 @@ public interface UserService {
 
     List<User> getAllUsers();
 
-    User getUser(Long id);
+  //  User getUser(Long id);
 
     void delete(Long id);
 

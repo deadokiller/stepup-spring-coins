@@ -1,28 +1,25 @@
-package ru.vtb.javapro.homework.model;
+package ru.stepup.spring.coins.core.api;
+
+import java.math.BigDecimal;
 
 public class UserProductResponse {
-
-    private Long productId;
-
     private String product;
 
+    private Long productId;
+    private String productType;
+    private String name;
+    private String accountNumber;
 
-    public UserProductResponse(Long productId, String product, String productType, String name, String accountNumber, Double balance) {
-        this.productId = productId;
+    private BigDecimal balance;
+
+    public UserProductResponse(Long productId,String product, String productType, String name, String accountNumber, BigDecimal balance) {
         this.product = product;
         this.productType = productType;
         this.name = name;
         this.accountNumber = accountNumber;
         this.balance = balance;
+        this.productId = productId;
     }
-
-    private String productType;
-
-    private String name;
-
-    private String accountNumber;
-
-    private Double balance;
 
     public String getProduct() {
         return product;
@@ -56,11 +53,11 @@ public class UserProductResponse {
         this.accountNumber = accountNumber;
     }
 
-    public Double getBalance() {
+    public BigDecimal getBalance() {
         return balance;
     }
 
-    public void setBalance(Double balance) {
+    public void setBalance(BigDecimal balance) {
         this.balance = balance;
     }
 
@@ -72,4 +69,3 @@ public class UserProductResponse {
         this.productId = productId;
     }
 }
-
