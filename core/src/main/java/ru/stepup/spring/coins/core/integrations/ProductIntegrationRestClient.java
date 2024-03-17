@@ -17,8 +17,8 @@ public class ProductIntegrationRestClient implements ProductIntegration {
     @Override
     public ProductResponse getUserProduct(Integer userId) {
         var response = restClient.get()
-                .uri("/user?userId=%s".formatted(userId))
-                .header("USERID", "12345678")
+                .uri("/user")
+                .header("USERID", userId.toString())
                 .header("Accept", "application/json")
                 .retrieve()
                 .body(ProductResponse.class);

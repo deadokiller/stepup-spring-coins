@@ -7,6 +7,8 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
+import java.math.BigDecimal;
+
 @Entity
 @Table(name = "user_product")
 public class UserProduct {
@@ -21,7 +23,7 @@ public class UserProduct {
     private Long productId;
 
     @Column(name = "balance")
-    private Double balance;
+    private BigDecimal balance;
 
     @Column(name = "account_number")
     private String accountNumber;

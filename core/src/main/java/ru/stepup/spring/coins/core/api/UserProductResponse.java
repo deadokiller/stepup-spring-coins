@@ -1,5 +1,7 @@
 package ru.stepup.spring.coins.core.api;
 
+import java.math.BigDecimal;
+
 public class UserProductResponse {
     private String product;
 
@@ -8,9 +10,9 @@ public class UserProductResponse {
     private String name;
     private String accountNumber;
 
-    private Double balance;
+    private BigDecimal balance;
 
-    public UserProductResponse(Long productId,String product, String productType, String name, String accountNumber, Double balance) {
+    public UserProductResponse(Long productId,String product, String productType, String name, String accountNumber, BigDecimal balance) {
         this.product = product;
         this.productType = productType;
         this.name = name;
@@ -51,11 +53,11 @@ public class UserProductResponse {
         this.accountNumber = accountNumber;
     }
 
-    public Double getBalance() {
+    public BigDecimal getBalance() {
         return balance;
     }
 
-    public void setBalance(Double balance) {
+    public void setBalance(BigDecimal balance) {
         this.balance = balance;
     }
 

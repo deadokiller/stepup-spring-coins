@@ -6,6 +6,8 @@ import ru.stepup.spring.coins.core.api.ExecuteCoinsResponse;
 import ru.stepup.spring.coins.core.configurations.properties.CoreProperties;
 import ru.stepup.spring.coins.core.exceptions.BadRequestException;
 
+import java.math.BigDecimal;
+
 @Service
 public class CoinsService {
     private final CoreProperties coreProperties;
@@ -25,12 +27,9 @@ public class CoinsService {
             }
         }
 
-        var products = productService.getUserProduct(userId);
-        products.getProductList()
-                .stream()
-                .filter(p -> p.getProductId().equals(Long.parseLong(request.productId())))
-                .filter(p -> p.getBalance() >= 0.0)
-                .findFirst()
+        var product = productService.getUserProduct(userId, request.productId());
+        product
+                .filter(p -> p.getBalance().compareTo(BigDecimal.ZERO) > 0)
                 .orElseThrow(() -> new BadRequestException("Нет подходящего продукта для исполнения", "PRODUCT_NOT_FOUND"));
 
         ExecuteCoinsResponse response = executorService.execute(request);

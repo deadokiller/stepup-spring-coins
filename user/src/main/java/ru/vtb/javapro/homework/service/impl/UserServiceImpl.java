@@ -2,32 +2,32 @@ package ru.vtb.javapro.homework.service.impl;
 
 import org.springframework.stereotype.Service;
 import ru.vtb.javapro.homework.entity.User;
-import ru.vtb.javapro.homework.repository.UserDao;
+import ru.vtb.javapro.homework.repository.UserRepository;
 import ru.vtb.javapro.homework.service.UserService;
 
 import java.util.List;
 
 @Service
 public class UserServiceImpl implements UserService {
-    private final UserDao userDao;
+    private final UserRepository userRepository;
 
-    public UserServiceImpl(UserDao userDao) {
-        this.userDao = userDao;
+    public UserServiceImpl(UserRepository userRepository) {
+        this.userRepository = userRepository;
     }
 
     @Override
     public void createUser(User user) {
-        userDao.save(user);
+        userRepository.save(user);
     }
 
     @Override
     public void delete(Long id) {
-        userDao.deleteById(id);
+        userRepository.deleteById(id);
     }
 
 /*    @Override
     public User getUser(Long id) {
-        return userDao.read()
+        return userRepository.read()
                 .stream()
                 .filter(user -> Objects.equals(user.getId(), id))
                 .findFirst()
@@ -36,17 +36,17 @@ public class UserServiceImpl implements UserService {
 */
     @Override
     public List<User> getAllUsers() {
-        return userDao.findAll();
+        return userRepository.findAll();
     }
 
     @Override
     public void update(Long id, String name) {
 
-        userDao.save(new User(id,name));
+        userRepository.save(new User(id,name));
     }
 
     @Override
     public void deleteAll() {
-        userDao.deleteAll();
+        userRepository.deleteAll();
     }
 }

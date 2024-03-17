@@ -20,6 +20,6 @@ public class ProductController {
 
     @GetMapping
     public ProductResponse getUserProduct(@RequestHeader("USERID") Integer userId) {
-        return productService.getUserProduct(userId);
+        return productService.getUserProducts(userId);
     }
 }

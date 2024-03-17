@@ -19,7 +19,8 @@ public class CoinsController {
     }
 
     @PostMapping("/execute")
-    public ExecuteCoinsResponse execute(@RequestBody ExecuteCoinsRequest request, @RequestHeader("USERID") Integer userId) {
+    public ExecuteCoinsResponse execute(@RequestBody ExecuteCoinsRequest request,
+                                        @RequestHeader("USERID") Integer userId) {
         return coinsService.execute(request, userId);
     }
 }
